@@ -1,0 +1,16 @@
+package boj_test;
+import java.util.Scanner;
+
+public class A_plus_B_5_10952 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		while (A != 0 && B != 0) {
+			int A, B, C;
+			
+		}
+		sc.close();
+	}
+
+}

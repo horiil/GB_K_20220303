@@ -1,0 +1,32 @@
+package boj_test;
+
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class A_plus_B_5_10951_buffered {
+
+	public static void main(String[] args) {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st = new StringTokenizer(bf.readLine());
+
+		int a = Integer.parseInt(st.nextToken());
+		int b = Integer.parseInt(st.nextToken());
+
+		while (a > 0 && b < 10) {
+			bw.write(a + b +"\n");
+            
+            try{
+                st = new StringTokenizer(bf.readLine());
+			    a = Integer.parseInt(st.nextToken());
+			    b = Integer.parseInt(st.nextToken());
+            } catch (Exception e){
+                return;
+            }
+		}
+		bf.close();
+		bw.close();
+	}
+
+}
+

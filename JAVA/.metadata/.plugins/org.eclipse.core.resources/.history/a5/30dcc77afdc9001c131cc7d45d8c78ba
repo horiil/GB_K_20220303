@@ -1,0 +1,14 @@
+package boj_test;
+
+import java.io.*;
+
+public class A_plus_B_5_10951_buffered {
+
+	public static void main(String[] args) {
+		
+		
+		
+		
+	}
+
+}

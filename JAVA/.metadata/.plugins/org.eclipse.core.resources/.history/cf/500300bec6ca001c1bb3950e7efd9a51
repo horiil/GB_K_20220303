@@ -1,0 +1,13 @@
+package boj_test;
+
+import java.util.Scanner;
+
+public class Plus_cycle {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		
+	}
+
+}
