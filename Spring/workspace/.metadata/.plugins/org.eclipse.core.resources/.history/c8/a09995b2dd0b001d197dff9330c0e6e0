@@ -1,0 +1,7 @@
+package com.koreait.jpaitem.domain;
+
+public class Orderitem {
+
+	
+	
+}

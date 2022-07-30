@@ -1,0 +1,10 @@
+package com.koreait.jpaitem.embed;
+
+import java.time.LocalDateTime;
+
+public class Peroid {
+	// 기간
+	private LocalDateTime startDate;
+	private LocalDateTime endDate;
+	
+}

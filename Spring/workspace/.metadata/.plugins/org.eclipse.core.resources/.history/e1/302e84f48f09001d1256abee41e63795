@@ -1,0 +1,67 @@
+package com.koreait.Springtest4.web.basic;
+
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.koreait.Springtest4.domain.Springtest4.Student;
+import com.koreait.Springtest4.domain.Springtest4.StudentRepository;
+import com.koreait.item.domain.item.Item;
+
+@Controller
+@RequestMapping("/basic/students")
+public class BasicStudentController {
+
+	private final StudentRepository studentRepository;
+	
+	public BasicStudentController(StudentRepository studentRepository) {
+		this.studentRepository = studentRepository;
+	}
+	
+	
+	@GetMapping
+	public String students(Model model) {
+		List<Student> students = studentRepository.findAll();
+		model.addAttribute("student", students);
+		return "/basic/students";
+	}
+	
+	// 등록페이지 이동
+	@GetMapping("/add")
+	public String studentAddForm(Model model) {
+		return "basic/studentAddForm";
+	}
+	
+	// 등록
+	@PostMapping("/add")
+	public String save(@ModelAttribute("student")Student student, RedirectAttributes redirectAttributes) {
+		Student savedSList = studentRepository.save(student);
+		
+		redirectAttributes.addAttribute("SId", savedSList.getStudentId());
+		
+		return "redirect:/basic/students/{savedSList}";
+	}
+	
+	
+	@GetMapping("/{savedSList}")
+	public String student(@PathVariable Long SId , Model model) {
+		Student student = studentRepository.findById(SId);
+		model.addAttribute("student", student);
+		return "basic/student";
+	}
+	
+	@GetMapping("/{SId}")
+	public String item(@PathVariable long itemId  ,Model model) {
+		Student student = studentRepository.findById(SId);
+		model.addAttribute("student", student);
+		return "basic/student";
+	}
+
+}

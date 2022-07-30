@@ -1,0 +1,20 @@
+package com.test.jpatest;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity @Getter @Setter
+public class Member {
+
+	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_ID_SEQ")
+	private Long id;
+	private String name;
+	private String city;
+	private String street;
+	private int zipcode;
+}

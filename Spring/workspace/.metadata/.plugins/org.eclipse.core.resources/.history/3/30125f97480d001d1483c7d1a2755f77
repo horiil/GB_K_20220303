@@ -1,0 +1,8 @@
+package com.koreait.jpaitem.embed;
+
+import javax.persistence.Entity;
+
+public class Peroid {
+
+	
+}

@@ -1,0 +1,36 @@
+package com.koreait.Springtest4.web.basic;
+
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.koreait.Springtest4.domain.Springtest4.Student;
+import com.koreait.Springtest4.domain.Springtest4.StudentRepository;
+
+@Controller
+@RequestMapping("/basic/students")
+public class BasicStudentController {
+
+	private final StudentRepository studentRepository;
+	
+	public BasicStudentController(StudentRepository studentRepository) {
+		this.studentRepository = studentRepository;
+	}
+	
+	
+	@GetMapping
+	public String students(Model model) {
+		List<Student> students = studentRepository.findAll();
+		model.addAttribute("student", students);
+		return "/basic/students";
+	}
+	
+	@GetMapping("/studentAdd")
+	public String studentAddForm(Model model) {
+		return "basic/studentAddForm";
+	}
+
+}

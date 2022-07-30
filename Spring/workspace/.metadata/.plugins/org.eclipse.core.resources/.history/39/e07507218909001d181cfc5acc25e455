@@ -1,0 +1,32 @@
+package com.koreait.student.web.basic;
+
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.koreait.student.domain.student.Student;
+import com.koreait.student.domain.student.StudentRepository;
+
+@Controller
+@RequestMapping("basic/students")
+public class BasicStudentController {
+
+	private final StudentRepository studentRepository;
+	
+	public BasicStudentController(StudentRepository studentRepository) {
+		this.studentRepository = studentRepository;
+	}
+	
+	
+	@GetMapping
+	public String students(Model model) {
+		List<Student> students = studentRepository.findAll();
+		model.addAttribute("student", students);
+		return "/basic/students";
+	}
+	
+
+}

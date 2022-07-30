@@ -1,0 +1,9 @@
+package com.koreait.jpql;
+
+public class MemberDTO {
+
+	private String username;
+	private int age;
+	
+	
+}

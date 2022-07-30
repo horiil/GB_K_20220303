@@ -1,0 +1,5 @@
+package com.koreait.student.domain.student;
+
+public class Student {
+
+}

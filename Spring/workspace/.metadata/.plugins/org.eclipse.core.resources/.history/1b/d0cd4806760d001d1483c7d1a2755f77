@@ -1,0 +1,51 @@
+package com.koreait.jpql;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+// @Tostring lombok사용시 tostring 기능을 메서드 호출만하면 편하게 사용 가능하다.
+@Entity // (name = "mm") entity 이름을 변경할 수 있으나 대부분 기본 이름으로 사용한다.
+public class Member {
+
+	@Id @GeneratedValue
+	private Long id;
+	private String username;
+	private int age;
+	
+	// 연관관계
+	@ManyToOne
+	@JoinColumn(name = "TEAM_ID")
+	private Team team;
+	
+	public void changeTeam(Team team) {
+		this.team = Team;
+		team.getMembers().add(this);
+	}
+	
+	public Member() {}
+
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
+	
+	
+	
+}

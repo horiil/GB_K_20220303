@@ -1,0 +1,30 @@
+package com.koreait.student.domain.student;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Repository;
+
+import com.koreait.item.domain.item.Item;
+
+@Repository
+public class StudentRepository {
+	private static final Map<Long, Student> store = new HashMap<>();
+	private static Long sequence = 1L;
+	
+	
+	// 저장 메서드
+	public Student save (Student student) {
+		// 학번 sequence
+		student.setStudentId(++sequence);
+		store.put(student.getStudentId(), student);
+		return student;
+	}
+	
+	// 전체 검색
+	public List<Student> findAll(){
+		return new ArrayList<Student>(store.values());
+	}
+}
