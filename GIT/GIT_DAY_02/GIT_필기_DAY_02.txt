@@ -1,0 +1,90 @@
+1. 명령어 
+  - git log -p : 로그에서 출력되는 버전 간의 차이점을
+		 출력하고 싶을때
+
+cd /c/0900_GB_KSH/git_test
+
+  - git log [id값] : id값 이후의 log만 보여진다.
+  - git diff [id값]..[id값] : 두 id값의 차이점을 파악
+  - git diff : 방금 수정된 기능에 대해서 어떤 작업을
+	     했는지 확인 할 수 있따.
+	     (단 add, commit을 하지않은 상태여야 한다.)
+  - git commit -am '[msg내용]' : add와 commit한꺼번에
+
+
+
+2. branch
+  - 원래 코드와는 상관없이 독립적으로 개발을 진행할 수
+  있는데, 이렇게 독립적으로 개발하는 것이 브랜치이다.
+  - https://git-scm.com/book/ko/v2/
+Git-%EB%B8%8C%EB%9E%9C%EC%B9%98
+-%EB%B8%8C%EB%9E%9C%EC%B9%98%EB%9E%8
+0-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80
+
+
+  - git branch 			  : branch 리스트를 보여준다.
+  - git branch [branch이름] 	  : 새로운 branch 만들기
+  - git checkout [branch이름] 	  : branch이름으로 대상 변경
+  - git log --branches --decorate : 저장되어 있는 모든 branch의
+				  log가 보여지게 된다.			
+  - git log --branches --decorate --graph : 앞에 그래프 추가
+  - git log --branches --decorate --graph --oneline :
+  로그 내용을 한줄로 보기 편하게 나열
+  - git log master..newb	  : master에는 없고 newb에는 있는 것
+  - git log -p newb..master	  : newb에는 없고 master에는 있는 것
+
+
+
+3. merge : branch 병합
+  - git merge newb : newb를 master로 merge 한다.
+
+
+-문제-
+* 위치 : c:\0900_GB_KSH
+* 폴더 새성
+* user.txt 파일생성, 내용 : function user
+* add, commit, 로그확인
+* user.txt 파일추가, 내용 : function user2
+* add, commit, 로그확인
+--
+* branch 생성(이름은 임의작성)
+* master test1.txt 생성, add, commit
+* 신규 branch에 test2.txt 생성, add commit
+* master에 신규 branch merge, 파일확인, 로그확인
+* 신규 branch에 master merge, 파일확인, 로그확인
+
+
+4. gitHub
+  - 1. 나의 소스코드를 백업
+  - 2. 다른 사람과의 협업 가능
+  - git clone [복사한 주소] [저장하고 싶은 디렉토리] :
+    디렉토리에 소스코드 복사
+
+
+fork : 내 저장소에 가져옴
+
+--reverse
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
