@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+	<script>
+		let obj1 = {
+			"name" : "google"
+		};
+
+		let obj2 = {
+			"url" : "www.google.com",
+			"abc" : "def"
+		};
+
+		let obj3 = {
+
+			"name" : "ksh",
+			"url" : "www.ksh.com",
+			"book" : "jQuery"
+		};
+		
+		// 중복은 제거되고 값이 덮어쓰여진다.
+		$.extend(obj1, obj2, obj3);
+		
+		// 값이 변형된다.
+		$.each(obj1, function(key, value){
+			document.write("key = " + key
+				+ ", value = " + value + "<br>");
+		});	
+		
+		document.write("----------------------------------<br>");
+		
+		// 값이 변형되지 않는다.
+		$.each(obj2, function(key, value){
+			document.write("key = " + key
+				+ ", value = " + value + "<br>");
+		});	
+		
+		document.write("----------------------------------<br>");
+		
+		// 값이 변형되지 않는다.
+		$.each(obj3, function(key, value){
+			document.write("key = " + key
+				+ ", value = " + value + "<br>");
+		});	
+	</script>
+
+
+
+</body>
+</html>

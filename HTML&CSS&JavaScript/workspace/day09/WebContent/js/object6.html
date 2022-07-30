@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<script>
+		/*
+			this키워드를 사용해서  for문 사용해서, grades.show() 호출시
+			a:10
+			b:20
+			c:30
+			을 출력하도록 하라
+		 */
+		let grades = {
+			'list' : {
+				'a' : 10,
+				'b' : 20,
+				'c' : 30
+			},
+			'show' : function() {
+				// 정담
+				// list안에 값이 있다면 순서대로 name이라는 변수안에 넣어라
+				for (let name in this.list) {
+					document.write(name + " : " + this.list[name] + "<br>");
+				}
+			}
+		};
+		grades.show();
+		// 틀림
+		// 				for(let i = 0; i < grades.list.length; i++){
+		// 					grades.list.length[i];
+		// 					document.write(this.list[i]);
+		// 				}
+
+		// 			}
+		// 		};
+		// 		grades.show();
+	</script>
+</body>
+</html>

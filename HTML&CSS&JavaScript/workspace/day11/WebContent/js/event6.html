@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<input type="button" id="target1" value="property">
+	<input type="button" id="target2" value="listener">
+	
+	<script>
+		function action(){
+			alert('click!!');
+		}
+		
+		function action2(){
+			alert('클릭!!');
+		}
+
+		// property
+		// 마지막 이벤트만 실행된다.
+		document.getElementById("target1").onclick = function(){
+			action();
+		}
+		document.getElementById("target1").onclick = function(){
+			action2();
+		}
+		
+		// listener
+		// 이벤트들이 무시되지 않고 전부 실행된다.
+		document.getElementById('target2').addEventListener('click', action);
+		document.getElementById('target2').addEventListener('click', action2);
+		
+		document.getElementById('target2').removeEventListener('click', action);
+	</script>
+</body>
+</html>

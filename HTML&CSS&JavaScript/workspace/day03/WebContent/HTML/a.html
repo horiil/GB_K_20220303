@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form action="http://localhost/a.jsp" >
+		<h3> 폼 </h3>
+		<p>
+			아이디 : <input type="text" name="user_id" id="Id" maxlength="10" placeholder="아이디를 입력하세요"> <br>
+			비밀번호 : <input type="password" name="user_pw" id="Pw" maxlength="10" placeholder="비밀번호를 입력하세요"> <br>
+		</p>
+	
+		<fieldset>
+			<legend>성별</legend> 
+			<label for="male">남자</label>
+			<input type="radio" name="gender" id="male" checked>	
+			<label for="female">여자</label>
+			<input type="radio" name="gender" id="female">
+		</fieldset>
+		<!--  id가 아니라 value를 사용해야한다. -->
+		
+		<fieldset>
+			<legend>좋아하는 과목</legend>
+			<label for="JAVA">JAVA</label>
+			<input type="checkbox" name="subject" id="JAVA" checked>
+			<label for="JSP">JSP</label>
+			<input type="checkbox" name="subject" id="JSP" checked>
+			<label for="HTML">HTML</label>
+			<input type="checkbox" name="subject" id="HTML" checked>
+			<label for="CSS">CSS</label>
+			<input type="checkbox" name="subject" id="CSS">
+		</fieldset>
+	
+		직업<select name="JOB">
+			<option value="student">학생</option>
+			<option value="soldier">군인</option>
+			<option value="teacher">교사</option>
+			<option value="office worker">직장인</option>
+		</select> <br>
+		<input type="file"> <br><br>
+		
+		자기소개 <br><br>
+		<textarea name="textarea" maxlength="100" name="cover_Letter" id="cover_Lertter" placeholder="자기 소개서를 입력하세요"></textarea><br>
+		우편번호: <input type="text" name="address" id="Zip code" maxlength="30"><input type="button" value="우편번호"><br>
+		주소: <input type="text" name="address" id="address1" maxlength="30"><br>
+		상세주소: <input type="text" name="address" id="address2" maxlength="30"><br>
+		참고사항: <input type="text" name="address" id="Note" maxlength="30"><br>
+		
+		
+		
+		
+		
+		<input type="reset" value="다시쓰기">
+		<input type="submit" value="확인">
+	</form>
+
+</body>
+</html>

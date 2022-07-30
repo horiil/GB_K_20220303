@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+
+<!-- 	실행시 에러 발생 이유는 id태그가 로드되기 전에 호출되기 때문이다.  -->
+
+<!-- 	<input type="button" id="hw" value="Hello"> -->
+	<script>
+		let hw = document.getElementById('hw');
+		hw.addEventListener('click', function(){
+			alert("Hello world");
+		});
+	</script>
+	<!-- 위에서 아래로 읽어오는 방식이라 input 태그가 아래에 위치하게 되면 에러가 발생한다. -->
+	<input type="button" id="hw" value="Hello">
+</body>
+</html>

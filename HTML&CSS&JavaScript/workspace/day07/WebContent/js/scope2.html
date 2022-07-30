@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<script>
+		var vscope = 'global';
+		
+		function fscope(){
+			var lv = 'local val';
+			alert(lv);
+		}
+		
+		fscope();
+		alert(lv);
+	
+	</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<!-- 
+	<thead></thead> : head 부분을 의미
+	<tbody></tbody>	: 테이블에서 본문을 의미
+	<th></th>		: 제목
+	<tfoot></tfoot>	: 표상에서 가장 아래쪽
+ -->
+<body>
+	<table border = "1">
+		<thead>
+			<tr>
+				<th>이름</th>
+				<th>성병</th>
+				<th>주소</th>
+				<th>나이</th>
+				<th>회비</th>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<tr>
+				<td>짱구</td>
+				<td>남</td>
+				<td rowspan="3">역삼역 3번출구</td>
+				<td>28</td>
+				<td>2000</td>
+			</tr>
+		
+		<tr>
+			<td>제리</td>
+			<td>남</td>
+			<td>83</td>
+			<td>3000</td>
+		</tr>
+
+		<tr>
+			<td>자두</td>
+			<td>여</td>
+			<td>53</td>
+			<td>2400</td>
+		</tr>
+		</tbody>
+		
+		<tfoot>
+			<tr>
+				<td colspan="4">합계</td>
+				<td>7400</td>
+			</tr>
+		</tfoot>
+	</table>
+</body>
+</html>

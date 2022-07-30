@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+	<ul>
+		<li class="active">HTML</li>
+		<li>CSS</li>
+		<li class="active">JavaScript</li>
+	</ul>
+	
+	<input type="button" value="javascript" onclick="funcJs();">
+	<input type="button" value="jQuery" onclick="funcJquery();">
+	
+	<script>
+		// 버튼 클릭시 HTML, JavaScript 문자의 색 변경
+		// 순수 js사용 해서 눌렀을 때 색을 입히기
+		
+		function funcJs(){
+			let lis = document.getElementsByClassName('active');
+			for(let i = 0; i < lis.length; i++){
+				lis[i].style.color = 'tomato';
+			}
+		}
+		
+		// jQuery 사용
+		function funcJquery(){
+			$(".active").css("color", "blue");
+			
+		}
+	
+	</script>
+	
+</body>
+</html>

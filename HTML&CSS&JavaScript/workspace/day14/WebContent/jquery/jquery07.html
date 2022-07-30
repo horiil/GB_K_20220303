@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<style>
+	p{
+		color: blue;
+		margin: 8px;
+	}
+
+
+</style>
+
+</head>
+<body>
+	<!-- 
+		속성제어
+		 0attr(), prop(), removeAttr(), removeProp(), val()
+	 -->
+	 
+	 <input type="text" value="some text" id="keys">
+	 <p></p>
+	 
+	 <script>
+		$("input").keyup(function(){
+			let value = $(keys).val();
+// 			console.log(value);
+			$("p").text(value);
+		});
+	 </script>
+</body>
+</html>
