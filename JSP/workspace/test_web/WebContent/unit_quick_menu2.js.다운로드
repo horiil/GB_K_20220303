@@ -1,0 +1,33 @@
+    (function(d) {
+        var options = {
+        partnerId : 'xexymix', // 톡톡 파트너계정 아이디
+        imageUrl : 'http://xexymix.jpg3.kr/xexymix/2020/main/quick_btn_naver.png', // 버튼아이콘 URL (첨부파일)
+        size : 35, // 버튼 사이즈. PC에서는 80, 모바일에서는 56 권장
+        circle : false, // 버튼 둥글게
+        shadow : false // 그림자 효과
+        }
+        
+        var img = document.createElement('img');
+        img.src = options.imageUrl;
+        img.width = options.size ;
+        img.height = options.size;
+        img.style.bottom = options.bottom + 'px';
+        img.style.right = options.right + 'px';
+        img.style.cursor = 'pointer';
+        img.style.borderRadius = options.circle ? '50%' : '';
+        img.style.boxShadow = options.shadow ? '0 0 4px rgba(0,0,0,.16), 0 4px 4px rgba(0,0,0,.24)' : '';
+        img.onclick = function(e) {
+        window.open('https://talk.naver.com/ct/wcb666#nafullscreen'+ options.partnerId + '?ref=' + encodeURIComponent(location.href) + '#nafullscreen', 'talktalk', 'scrollbars=1, resizable=1, width=486, height=745');
+        }
+        document.getElementsByClassName('navertalk')[0].appendChild(img);
+    })(document);
+
+
+
+//버튼클릭
+	jQuery('.plus-btn').click(function(){
+		jQuery('.quick-cont .menu').addClass('show');
+	});
+	jQuery('.plus-btn-x').click(function(){
+		jQuery('.quick-cont .menu').removeClass('show');
+	});

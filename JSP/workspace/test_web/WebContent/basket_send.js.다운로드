@@ -1,0 +1,449 @@
+var location_dir = (typeof MOBILE_USE != 'undefined' && MOBILE_USE == '1') ? '/m/' : '/shop/';
+
+// 장바구니 공통 담기 action 분기처리
+// 통옵은 ajax 처리
+// 통옵 아닐때는 기존처럼 submit() 형식
+function common_basket_send(form, is_unify_opt) {
+    if (typeof form == 'undefined') {
+        alert('장바구니 담기에 실패하였습니다. 다시 시도해주세요.');
+        return false;
+    }
+    var _form = jQuery(form);
+
+//    is_unify_opt = false;
+
+    if (is_unify_opt) {
+        // 통옵은 ajax 처리
+        jQuery.ajax({
+            url : location_dir + 'basket.action.html',
+            type : 'POST',
+            data : jQuery(_form).serialize(),
+            dataType: 'json',
+            success : function(res) {
+                if (res.status === false) {
+                    if (res.message) {
+                        if (res.confirm_url) {
+                            if (confirm(res.message)) {
+                                document.location.href = location_dir + res.confirm_url;
+                            }
+                        } else {
+                            alert(res.message);
+                        }
+                    }
+                    return;
+                } else {
+
+                    // 페이코 바로구매
+                    if (res.payco_checkout === true) {
+
+                        // 로그 스크립트 호출
+                        send_script('insert', res.log_data, send_script_payco, res.tempid);
+                        return;
+                    }
+
+                    // 네이버페이
+                    if (res.navercheckout_use === true) {
+
+                        // 로그 스크립트 호출
+                        //send_script('insert', res.log_data, send_script_naver, res.navercheckout);
+                        send_script_naver(res.navercheckout);
+                        return;
+                    }
+
+                    // 바로구매 - 주문서 페이지로 이동
+                    if (res.etc_data.baro_type == 'baro') {
+                        var baro_url     = location_dir + 'order.html';
+                        var add_rand_url = (typeof res.etc_data.add_rand_url != 'undefined') ? res.etc_data.add_rand_url : '';
+
+                        // PC 비회원은 로그인 페이지로 url 지정해줘야됨
+                        if (MOBILE_USE != '1') {
+                            if (res.is_login !== true) {
+                                baro_url = '/shop/qmember.html';
+                            }
+                        }
+
+                        // direct_order 값 있으면 지워버리기
+                        if (jQuery('#direct_order', _form).length > 0) {
+                            jQuery('#direct_order', _form).remove();
+                        }
+
+                        var location_url = baro_url + add_rand_url;
+
+                        // 로그 스크립트 호출 
+                        send_script('insert', res.log_data, send_script_location, location_url);
+                        return;
+                    }
+
+                    // 장바구니에 담기 후 페이지 이동
+                    var orbas = res.etc_data.cart_orbas;
+
+                    if (orbas == null || orbas == '') {
+                        if (res.message) {
+                            alert(res.message);
+                        }
+                        var basket_url = location_dir + 'basket.html';
+                        var add_url = '';
+                        if (res.etc_data.basket_page_type == 'subs_select') {
+                            add_url = '?basket_type=SUBS';
+                        }
+
+                        var location_url = basket_url + add_url;
+
+                        // 로그 스크립트 호출 
+                        send_script('insert', res.log_data, send_script_location, location_url);
+
+                    } else if (orbas == 'Y') {
+                        // 팝업형식
+                        var basket_pop_form = jQuery('<form name="basket_pop_form" action="/shop/gobasket.html" target="basket_box" method="post"></form>');
+                        basket_pop_form.append(jQuery('<input/>', {type: 'hidden', name: 'prdname', value: res.message}));
+                        basket_pop_form.append(jQuery('<input/>', {type: 'hidden', name: 'tempid', value: res.tempid}));
+                        basket_pop_form.append(jQuery('<input/>', {type: 'hidden', name: 'product_uid', value: res.etc_data.basket_main_uid}));
+                        basket_pop_form.append(jQuery('<input/>', {type: 'hidden', name: 'subs_type', value: res.etc_data.basket_page_type}));
+                        basket_pop_form.appendTo('body');
+                        var xPos = (document.body.offsetWidth/2) - (450/2); // 가운데 정렬
+                            xPos += window.screenLeft; // 듀얼 모니터일 때
+                        if (window.open("", "basket_box", "scrollbars=yes, overflow-y=auto, status=no, top=180, left="+xPos+", width=434, height=200")) {
+                            basket_pop_form.submit();
+                            basket_pop_form.remove();
+                        } else {
+                            if (typeof parent.showdetail != 'undefined') {
+                               parent.showdetail('hidden');
+                            }
+                            self.close();
+                        }
+
+                        // 로그 스크립트 호출
+                        send_script('insert', res.log_data);
+
+                    } else if (orbas == 'A') {
+                        // 레이어형식
+                        viewlayerbasket('visible', res.message, 'BAS', res.etc_data.basket_page_type, res.etc_data.basket_main_uid, is_unify_opt);
+
+                        // 로그 스크립트 호출
+                        send_script('insert', res.log_data);
+                    }
+                }
+            }
+        });
+    } else {
+        // 통옵 아닐때는 기존처럼 submit() 형식
+        jQuery(_form).submit();
+    }
+}
+
+// 광고/로그 호출 
+function send_script(action_type, log_data_list, callback, callback_param) {
+    var location_log_dir = (MOBILE_USE == 1) ? "/m/" : "/html/";
+    var location_action_url = location_log_dir + "log_basket.html";
+
+    // 새로운 아이프레임 생성 (history 초기화를 위함)
+    if (jQuery('#sendscript_iframe').length == 0) {
+        var sendscript_iframe = jQuery('<iframe name="sendscript_iframe" id="sendscript_iframe" style="display:none;"></iframe>');
+        sendscript_iframe.appendTo('body');
+    }
+
+    //log_basket > log_makeshop 데이터 전송 
+    var basket_script_form = jQuery('<form name="basket_script_form" target="sendscript_iframe" method="post" action="'+ location_action_url +'"></form>');
+    //장바구니 담기 - 여러개 담기에 대한 처리 
+    if (action_type == 'insert' && log_data_list != undefined) {
+        //log_basket > log_makeshop 데이터 전송 
+        basket_script_form.append(jQuery('<input/>', {type: 'hidden', name: 'basket_log_data', value: encodeURIComponent(JSON.stringify(log_data_list))}));
+    } else { // 장바구니 수정 / 삭제 
+        basket_script_form.append(jQuery('<input/>', {type: 'hidden', name: 'brandcode', value: log_data_list.brandcode}));
+        basket_script_form.append(jQuery('<input/>', {type: 'hidden', name: 'amount', value: log_data_list.amount}));
+        basket_script_form.append(jQuery('<input/>', {type: 'hidden', name: 'orgamount', value: log_data_list.orgamount}));
+        basket_script_form.append(jQuery('<input/>', {type: 'hidden', name: 'uid', value: log_data_list.uid}));
+    }
+    basket_script_form.append(jQuery('<input/>', {type: 'hidden', name: 'action_type', value: action_type}));
+    basket_script_form.appendTo('body');
+    basket_script_form.submit();
+    basket_script_form.remove();
+
+    jQuery('#sendscript_iframe').one('load', function() {
+        // 생성한 iframe 삭제
+        jQuery('#sendscript_iframe').remove();
+
+        // callback 함수 실행
+        if (typeof callback == 'function'){
+            callback(callback_param);
+        }
+    });
+
+    return true;
+
+}
+// 담기 팝업 관련 상품 리스트 노출 
+function get_popup_product_list(page) { 
+    var block_ct = 3;
+    var block_start = (page -1) * block_ct;
+    var block_end = block_start + block_ct;
+    var block_product_list = [];
+    jQuery("input[name^='product_list_']").each(function(index) {
+        if (block_start <= index && index < block_end) {
+            var uid         = jQuery(this).attr('uid');
+            var sellprice   = jQuery(this).attr('sellprice');
+            var prd_arr = {
+                'uid'       : uid,
+                'sellprice' : sellprice
+                }
+            block_product_list.push(prd_arr);
+        }
+    });
+    if (block_product_list.length > 0) {
+        jQuery.ajax({
+            url      : '/shop/basket_alert_block_product_list.ajax.html',
+            type     : 'POST',
+            dataType : 'JSON',
+            data     : { 
+                pop_product_list : block_product_list,
+                pop_type         : pop_type
+            },
+            success  : function(res) {
+                rel_html = decodeURIComponent(res.html);
+                jQuery('#rel_product_list').html(rel_html);
+                jQuery('span#current_page').text(page);
+                var next_page = page +1;
+                var prev_page = page -1;
+                var rp_prev = "span#prev_page a";
+                var rp_next = "span#next_page a";
+                if (page == 1) {
+                    jQuery(rp_prev).addClass("disabled");
+                    jQuery(rp_prev).attr('href', "");
+                } else {
+                    jQuery(rp_prev).removeClass("disabled");
+                    jQuery(rp_prev).attr("href", "javascript:get_popup_product_list("+prev_page+")");
+                }
+                if (page == total_page) {
+                    jQuery(rp_next).addClass("disabled");
+                    jQuery(rp_next).attr("href", "");
+
+                } else {
+                    jQuery(rp_next).removeClass("disabled");
+                    jQuery(rp_next).attr('href', "javascript:get_popup_product_list("+next_page+")");
+                }
+            },
+            error    : function () {
+                return false;
+            }
+        });
+    } else {
+        jQuery('#paging-wrap').html('');
+
+    }
+}
+// 비활성화 버튼 클릭 금지 
+jQuery(document).on('click', 'span > a.disabled', function (e) {
+    e.preventDefault();
+});
+
+// 담기 팝업 버튼 링크 (쇼핑 계속하기 / 장바구니 이동)
+function popup_page_link(type, action, basket_type) {
+    var add_url = '';
+    if (type == 'POP') {
+        if (action == 'CONTINUE') {
+            window.close();
+        } else {
+            if (basket_type == 'SUBS') {
+                add_url = '?basket_type=SUBS';
+            }
+            opener.parent.location.href = "/shop/basket.html"+add_url;
+            window.close();
+        }
+    } else { //레이어팝업
+        if (action == 'CONTINUE') {
+            jQuery('#MK_basketpage').css('visibility', 'hidden');
+        } else {
+            if (basket_type == 'SUBS') {
+                add_url = '?basket_type=SUBS';
+            }
+            window.location.href = location_dir + "basket.html" + add_url;
+        }
+
+    }
+}
+
+// callback 함수 호출 후 페이지 이동처리
+function send_script_location(url) {
+    if (url) {
+        document.location.href = url;
+    }
+}
+
+// callback 함수 호출 후 장바구니 수량 계산 호출
+function send_script_udpate(cart_type) {
+    cal_basket_chk(null, '', cart_type);
+}
+
+// callback 함수 호출 후 페이코 바로구매 호출
+function send_script_payco(tempid) {
+    var payco_form = jQuery('<form name="payco_checkout_frm" method="post" action="order.html?direct_order=payco_checkout">');
+    payco_form.append(jQuery('<input/>', {type: 'hidden', name: 'direct_order', value: 'payco_checkout'}));
+    payco_form.append(jQuery('<input/>', {type: 'hidden', name: 'tempid', value: tempid}));
+    payco_form.appendTo('body');
+
+    // MOBILE - 현재창, PC - 새창
+    if (typeof MOBILE_USE != 'undefined' && MOBILE_USE == 1) {
+        document.payco_checkout_frm.target = "";
+    } else {
+        window.open('', 'payco_win', 'width=692');
+        document.payco_checkout_frm.target = "payco_win";
+    }
+    payco_form.submit();
+    payco_form.remove();
+}
+
+// callback 함수 호출 후 네이버페이 호출
+function send_script_naver(navercheckout) {
+
+    // 새로운 아이프레임 생성
+    if (jQuery('#naverpay_iframe').length == 0) {
+        var naverpay_iframe = jQuery('<iframe name="naverpay_iframe" id="naverpay_iframe" style="display:none;"></iframe>');
+        naverpay_iframe.appendTo('body');
+    }
+
+    // 네이버페이 호출
+    window.open(location_dir + "navercheckout.action.html?action_type=order&navercheckout=" + navercheckout, "naverpay_iframe", 'scroll=no, status=no'); 
+}
+
+// 장바구니 다시담기 (개별)
+function re_basket_js(type,basket_num, ordernum) {
+    if (type == 'order_list') { //모바일 
+        var basket_form = jQuery('form[name=re_basket_'+ordernum+']');
+        var ordernum    = ordernum;
+    } else { //스마트 마이페이지/마이페이지
+        var basket_form         = jQuery('form[name=form1]');
+        var ordernum            = jQuery('input[name="ordernum"]', basket_form).val();
+    }
+    var basket_type         = jQuery('input[name="basket_type_'+basket_num+'"]', basket_form);
+    var basket_type_list    = basket_type.attr('basket_type');
+    var chk_basket_type_arr = ['EXTRA_MAIN', 'EXTRA_PRD', 'PACKAGE_MAIN', 'PACKAGE_PRD'];
+    var num_amount_list     = '';
+    var basket_type_uid     = 0;
+    var num_amount_arr      = [];
+
+    // 묶음 처리(구성품 or 메인 상품만 선택 했을 경우, 관련 상품 모두 담기 가능하도록)  
+    if (jQuery.inArray(basket_type_list, chk_basket_type_arr) !== false && basket_type_list != undefined && basket_type_list != '') {
+        var basket_type_arr = [];
+        var basket_num_arr  = [];
+        basket_type_uid = basket_type.attr('basket_type_uid');
+        // 같은 basket_type_uid를 갖는 basket_num/type/amount 저장 
+        jQuery('input[basket_type_uid="'+basket_type_uid+'"]', basket_form).each(function() {
+            basket_num_arr.push(jQuery(this).attr('basket_num'));
+            basket_type_arr.push(jQuery(this).attr('basket_type'));
+             
+            if (type == 'smart_mypage') { // 스마트 마이페이지 - 수량변경한 값 
+                var tmp_amount = jQuery('#MK_sel_basket_amount_'+jQuery(this).attr('basket_num')).val();
+                num_amount_arr.push(jQuery(this).attr('basket_num') + '|' + tmp_amount);
+            }
+        });
+        basket_num  = basket_num_arr.join(',');
+        basket_type_list = basket_type_arr.join(',');
+        if (type == 'smart_mypage') {
+            num_amount_list  = num_amount_arr.join('&&');
+        }
+    } else {
+        if (type == 'smart_mypage') { // 스마트 마이페이지 - 수량변경한 값 
+            var tmp_amount = jQuery('#MK_sel_basket_amount_'+basket_num).val();
+            num_amount_arr.push(basket_num + '|' + tmp_amount);
+            num_amount_list  = num_amount_arr.join('&&');
+        }
+    }
+    var data = {
+        'action_type'       : 'insert',
+        'mode'              : 're_basket',
+        'ordernum'          : ordernum,
+        'basket_num'        : basket_num,
+        'num_amount_list'   : num_amount_list,
+        'basket_type_uid'   : basket_type_uid,
+        'basket_type'       : basket_type_list
+    }
+    $.ajax({
+        url  : location_dir + 'basket.action.html',
+        type : 'POST',
+        data : data,
+        dataType: 'json',
+        success : function(response) {
+            if (response.status === true) {
+                //로그 처리 위함 
+                send_script('insert', response.log_data);
+                if (!confirm("상품이 장바구니에 담겼습니다. 지금 확인하시겠습니까? \n(수량, 옵션변경 등은 장바구니에서 변경하실 수 있습니다.)")) {
+                    return;
+                } else {
+                    if (type == 'mypage') {
+                        window.close();
+                        window.opener.location.href = 'basket.html';
+
+                    } else {
+                        location.href = 'basket.html';
+                    }
+                }
+            } else {
+                alert(response.message);
+            }
+        }
+    });
+}
+
+// 장바구니 다시담기 (전체)
+function re_basket_all_js(type, ordernum) {
+    var basket_num_list = '';
+    var num_amount_list = '';
+    var num_amount_arr  = [];
+
+    if (type == 'order_list') { //모바일 - ordernum만 필요함 
+        var ordernum = ordernum;
+    } else {
+        var basket_form = jQuery('form[name=form1]');
+        var ordernum    = jQuery('input[name="ordernum"]', basket_form).val();
+    }
+
+    if (type == 'smart_mypage') { // 스마트 마이페이지 : 수량 변경시 처리 
+        basket_num_list = jQuery('input[name="basket_num_list"]', basket_form).val();
+        var gift_num_list   = jQuery('input[name="gift_num_list"]', basket_form).val();
+        var item            = document.getElementsByName('MK_sel_basket_num[]');
+
+        // 수량 처리 
+        for (var i = 0 ; i < item.length; i++) {
+            if (gift_num_list.indexOf(item[i].value) != '-1') { //사은품 제외 
+                continue;
+            }
+            var stock = 1;
+            stock =document.getElementById('MK_sel_basket_amount_' + item[i].value).options[document.getElementById('MK_sel_basket_amount_' + item[i].value).selectedIndex].value;
+            num_amount_arr.push(item[i].value + '|' + stock);
+        }
+        // 개별옵션은 ADDITION_MAIN basket_num 만 넘기므로, 수량 데이터와 안맞을 수 있음 
+        num_amount_list = num_amount_arr.join('&&'); // 전체 basket_num|amount 넘기기 위함
+    }
+    var data = {
+        'action_type'     : 'insert',
+        'mode'            : 're_basket_all',
+        'ordernum'        : ordernum,
+        'basket_num'      : basket_num_list,
+        'num_amount_list' : num_amount_list
+    }
+
+    $.ajax({
+        url : location_dir + 'basket.action.html',
+        type : 'POST',
+        data : data,
+        dataType: 'json',
+        success : function(response) {
+            if (response.status === true) {
+                //로그 처리 위함 
+                send_script('insert', response.log_data);
+                if (!confirm(response.message)) {
+                    return;
+                } else {
+                    if (type == 'mypage') {
+                        window.close();
+                        window.opener.location.href = 'basket.html';
+                    } else {
+                        location.href = location_dir + 'basket.html';
+                    }
+                }
+            } else {
+                alert(response.message);
+            }
+        }
+    });
+}

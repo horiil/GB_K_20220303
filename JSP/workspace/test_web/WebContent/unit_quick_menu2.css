@@ -1,0 +1,22 @@
+/* BASIC css start */
+.quick-menu { position: fixed; z-index: 49; right: 0; bottom: 30px; 
+    -webkit-transition: all 200ms ease;
+    -moz-transition: all 200ms ease;
+    -ms-transition: all 200ms ease;
+    -o-transition: all 200ms ease;
+    transition: all 200ms ease; }
+.quick-cont { position:relative; z-index: 991; }
+.quick-cont .plus-btn { width: 55px; height: 55px; padding: 10px; background: #000; }
+.quick-cont .plus-btn-x { width: 55px; height: 55px; padding: 10px; background: #000; position: absolute; bottom: -55px; right: 0; }
+.quick-cont .top-btn { width: 55px; height: 55px; padding: 10px; background: #000; }
+.quick-cont .menu { position:absolute; right: 0; bottom: 110px; width:auto; box-sizing:border-box; display:none; z-index: 1; }
+.quick-cont .menu ul { width: 55px; padding: 10px; background: #000; }
+.quick-cont .menu li { position: relative; height: 35px; margin-bottom: 15px; }
+.quick-cont .menu li:last-child { margin-bottom: 0; }
+.quick-cont .menu li .today_ico { position: absolute; top: 0; left: 31px; font-size: 10px; font-weight: 600; line-height: 11px; color: #ed141c; }
+.quick-cont .menu.show {display:block; }
+.quick-cont .menu a {display:block; color: #fff; font-size: 12px; }
+.quick-cont .menu img { width: 35px; }
+html.fixed .quick-menu {visibility:visible; opacity:1; }
+/* BASIC css end */
+

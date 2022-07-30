@@ -1,0 +1,23 @@
+/* BASIC css start */
+.all-menu-wrap { display:none; background:#fff; z-index:50; width:100%; border-top: 1px solid #eeeeee; }
+.all-menu-wrap.active { display:block; }
+.all-menu-wrap .menu-all { position: relative; width: 100%; padding:50px 0; background: #fff; z-index: 40; }
+.all-menu-wrap .menu-all li { display: inline-block; vertical-align: top; text-align: left; }
+.all-menu-wrap .menu-all li a { position:relative; display:block; font-size:13px; color:#636363; margin-bottom:18px; }
+.all-menu-wrap .menu-all a.on:after { position: absolute; width: 7px; height: 7px; margin-left: 3px; background: #ff6d44; border-radius: 50%; content: ""; }
+.all-menu-wrap .menu-all .bold { color:#000; font-size:15px; margin-bottom:15px; font-weight: 500; }
+.all-menu-wrap .menu-left { display: inline-block; }
+.all-menu-wrap .menu-left ul { width:100%; display: flex; justify-content: flex-start; align-items: flex-start; }
+.all-menu-wrap .menu-left li { max-width: 150px; padding-right: 50px; }
+.all-menu-wrap .menu-left .top-left { text-align: left; padding-bottom: 40px; }
+.all-menu-wrap .menu-left .top-left a { margin-right: 4%;  font-weight: 500; font-size: 15px; }
+.all-menu-wrap .menu-right { display: inline-block; }
+.all-menu-wrap .menu-right li { padding-left: 10px; }
+.all-menu-wrap .menu-right ul { width:100%; margin:0 auto; padding-left: 15px; display: flex; justify-content: flex-start; align-items: flex-start; }
+.all-menu-wrap .menu-right .top-right { text-align: right; padding-bottom: 40px; }
+.all-menu-wrap .menu-right .top-right a { margin-left: 5%;  font-weight: 500; font-size: 15px; }
+
+.dimmed-bg { position: fixed; top: 91px; left: 0; right: 0; bottom: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); visibility: hidden; opacity: 0; }
+.dimmed-bg.show { visibility: visible; opacity: 1; }
+/* BASIC css end */
+

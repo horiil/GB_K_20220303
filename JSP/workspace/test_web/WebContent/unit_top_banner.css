@@ -1,0 +1,20 @@
+/* BASIC css start */
+.top_banner1 { position: relative; background: #000; width: 100%; height: 35px; top: 0; color: #fff; text-align: center; }
+.top_banner1 a { display:block; line-height: 35px; color: #fff; }
+
+
+.header-wrap { position: absolute; background: #000; width: 100%; height: 35px; line-height: 35px; top: 0; color: #fff; text-align: center; }
+.header-wrap .top_slide { overflow:hidden; height:35px; }
+.header-wrap .top_slide .swiper-slide a { display:block; line-height: 35px; color: #fff; }
+
+
+/*타이머배너*/
+.timer_banner { position: relative; width: 100%; height: 35px; background: #000; color: #ccc; text-align: center; }
+.timer_banner .countdown { display: contents; line-height: 35px; font-size: 12px; font-weight: 600; }
+.timer_banner .countdown .timeel { display: inline-block; color: #fff; }
+.timer_banner .countdown .hours, 
+.timer_banner .countdown .minutes, 
+.timer_banner .countdown .seconds { width: 22px; letter-spacing: 1px; }
+.timer_banner a { display: block; }
+/* BASIC css end */
+

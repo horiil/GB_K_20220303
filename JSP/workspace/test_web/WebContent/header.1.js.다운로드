@@ -1,0 +1,76 @@
+jQuery(document).ready(function(){
+
+	// hide #back-top first
+	jQuery("#back-top").hide();
+
+	// fade in #back-top
+	jQuery(function () {
+		jQuery(window).scroll(function () {
+			if (jQuery(this).scrollTop() > 400) {
+				jQuery('#back-top').fadeIn();
+			} else {
+				jQuery('#back-top').fadeOut();
+			}
+		});
+
+		// scroll body to 100px on click
+		jQuery('#back-top a span').click(function () {
+			jQuery('body,html').animate({
+				scrollTop: 0
+			}, 400);
+			return false;
+		});
+	});
+
+});
+
+function toggle_view(selector, obj){
+	var search = jQuery('#'+selector+'');
+	var obj = jQuery(obj);
+	if (search.css('display') == 'none') {
+		search.show();
+		obj.addClass('check');
+	} else {
+		search.hide();
+		obj.removeClass('check');
+	}
+}
+
+
+
+
+(function(jQuery) {
+
+    // 검색창
+    jQuery('.searchBtn').click(function () {
+        jQuery('#hd_search,.asideBack').addClass("show");
+    });
+    jQuery('.searchClose').click(function () {
+        jQuery('#hd_search,.asideBack').removeClass("show");
+    });
+    jQuery('.btn-menu').click(function () {
+        jQuery('.dimmed-bg').toggleClass("show");
+    });
+	
+    
+    //상단메뉴
+    jQuery(window).scroll(function(){
+		var tab = jQuery('.tab-fixed-wrap'),
+			scroll = jQuery(window).scrollTop();
+
+		if (scroll >= 200) {
+			tab.addClass('active');
+		} else {
+			tab.removeClass('active');
+		}
+	});
+
+    
+    //햄버거메뉴
+	jQuery('.btn-menu').click(function(){
+		jQuery('.all-menu-wrap, .all-menu').toggleClass('active');
+	});
+	
+
+})(jQuery);
+

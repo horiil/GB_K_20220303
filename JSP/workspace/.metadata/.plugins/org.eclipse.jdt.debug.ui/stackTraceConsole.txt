@@ -1,0 +1,6 @@
+// 	String result = "";
+// 	if (num % 2 != 0){
+// 		result = "È¦¼ö";
+// 	} else {
+// 		result = "Â¦¼ö";
+// 	}

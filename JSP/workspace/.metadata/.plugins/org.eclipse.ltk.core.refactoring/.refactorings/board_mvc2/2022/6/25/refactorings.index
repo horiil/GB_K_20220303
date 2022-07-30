@@ -1,0 +1,12 @@
+1655359527198	Rename package 'com.koreait.board'
+1655360665152	Rename package 'com.koreait.app.user.mybatis'
+1655360709493	Rename package 'com.koreait.app.user.sql'
+1655360915335	Rename type 'UserCharacterEncodingFilter'
+1655361003601	Rename resource 'user.xml'
+1655364046673	Rename package 'com.koreait.app.user.dao'
+1655364158714	Delete element
+1655364336991	Rename package 'com.koreait.app.user.dao'
+1655364353168	Rename type 'UserDAO'
+1655364362227	Rename type 'UserDTO'
+1655426579536	Move 'jstl' to 'app'
+1655426586297	Move 'jstl' to 'WebContent'

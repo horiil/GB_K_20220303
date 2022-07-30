@@ -1,0 +1,12 @@
+var swiper = new Swiper(".top_slide", {
+    direction: "vertical",
+    slidesPerView: 1,
+    spaceBetween: 0,
+    mousewheel: true,
+    loop: true,
+    speed: 1000,
+    autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+      },
+});

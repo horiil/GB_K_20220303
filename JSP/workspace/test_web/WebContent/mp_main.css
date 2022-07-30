@@ -1,0 +1,27 @@
+/* BASIC css start */
+#mypage { width: 1300px; margin: 0 auto; } 
+#mypage .info .order { position: relative; margin:50px 0 30px; padding:25px; } 
+#mypage .info .order table {table-layout:fixed; width:100%;} 
+#mypage .info .order table td.first {position:relative; border-left:0; padding-left:20px; }
+#mypage .info .order table td.first .group_icon { display: inline-block; text-align: center; padding-right: 20px; line-height: 33px; }
+#mypage .info .order table td.first .group_txt { display: inline-block; font-size: 14px; line-height: 33px; }
+#mypage .info .order table td.first .group_txt .member_name { display: block; }
+#mypage .info .order table td.first .group_txt .member_name strong { font-size:28px; font-weight: 600; }
+#mypage .info .order table td.first .btn { position: absolute; top: 0; right: 50px; height: 32px; border: 1px solid #e6e6e6; text-align: center; }
+#mypage .info .order table td.first .btn a { display: block; line-height: 30px; padding: 0 10px; }
+#mypage .info .order table td {padding:0px 46px; border-left:1px solid #e6e6e6; vertical-align:middle;}
+#mypage .info .order table td dl dt { font-size:14px; padding-bottom: 10px; }
+#mypage .info .order table td dl dd { font-size:13px; }
+#mypage .info .order table td dl dd strong { font-size:33px; }
+#mypage .hd {position:relative;}
+#mypage .hd h3 {height:54px; font-size:16px; font-weight:400; line-height:54px;}
+#mypage .hd .view {position:absolute; top:0; right:0; z-index:1; height:54px; color:#808080; font-size:13px; font-weight:400; line-height:54px;}
+#mypage .tbl {padding-bottom:30px;}
+#mypage .tbl .tb-center .btn_more { width:55px; margin:0 auto; padding: 0; border:1px solid #000; }
+#mypage .tbl .tb-center .btn_more a { display: block; padding:4px 8px; }
+
+#mypage .item-wrap { max-width: auto; min-width: auto; padding: 0; }
+#mypage .item-wrap .item-cont.col5 .item-list { width: 19%; }
+#mypage .item-wrap .item-cont.col5 .item-list dt img { width: 100%; }
+/* BASIC css end */
+

@@ -1,0 +1,310 @@
+if (typeof Object.assign != 'function') {
+    // Must be writable: true, enumerable: false, configurable: true
+    Object.defineProperty(Object, "assign", {
+        value: function assign(target, varArgs) { // .length of function is 2
+            'use strict';
+            if (target == null) { // TypeError if undefined or null
+                throw new TypeError('Cannot convert undefined or null to object');
+            }
+            var to = Object(target);
+            for (var index = 1; index < arguments.length; index++) {
+                var nextSource = arguments[index];
+                if (nextSource != null) { // Skip over if undefined or null
+                    for (var nextKey in nextSource) {
+                        // Avoid bugs when hasOwnProperty is shadowed
+                        if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                            to[nextKey] = nextSource[nextKey];
+                        }
+                    }
+                }
+            }
+            return to;
+        },
+        writable: true,
+        configurable: true
+    });
+}
+
+function searchAutoComplete(el, options) {
+    var self = this;
+    this.el = el;
+    this.search_keyword = "";
+    this.categories = [];
+    this.keywords = [];
+    this.all_keywords = [];
+    this.index = -1;
+
+    var defaults = {
+        category_count: 3, // max: 3
+        link_enabled: true,
+    };
+    this.options = Object.assign({}, defaults, options)
+
+    this.init = function () {
+        if (document.querySelectorAll('.search-auto-complete-list')) {
+            this.el.setAttribute('autocomplete', 'off');
+            this.event();
+        }
+    }
+
+    this.indexReset = function () {
+        this.index = -1;
+    }
+
+    this.increase = function () {
+        if (this.all_keywords.length - 1 > this.index) {
+            if (this.index === -1) {
+                this.index = this.categories.length;
+            } else {
+                this.index++;
+            }
+        }
+        if (this.index > -1) {
+            this.open();
+        }
+    }
+
+    this.decrease = function () {
+        if (this.index >= 0) {
+            this.index--;
+        }
+        if (this.categories.length > this.index) {
+            this.indexReset();
+            this.close();
+        }
+    }
+
+    this.choiceOn = function () {
+        var search_auto_complete_list = this.findParentElement(this.el, '.search-auto-complete-list');
+        if (search_auto_complete_list) {
+            var search_auto_complete_list_li = search_auto_complete_list.querySelectorAll('li');
+            for (var i=0; i<search_auto_complete_list_li.length; i++) {
+                if (i === this.index) {
+                    search_auto_complete_list_li[i].classList.add('on');
+                } else {
+                    search_auto_complete_list_li[i].classList.remove('on');
+                }
+            }
+        }
+    }
+
+    this.arrowKey = function (e) {
+        if (e.keyCode === 40) {
+            e.preventDefault();
+            this.increase();
+            if (this.all_keywords[this.index]) {
+                this.el.value = this.all_keywords[this.index].name;
+            }
+        }  else if (e.keyCode === 38) {
+            e.preventDefault();
+            this.decrease();
+            if (this.all_keywords[this.index]) {
+                this.el.value = this.all_keywords[this.index].name;
+            } else {
+                this.el.value = this.search_keyword;
+            }
+        }
+        this.choiceOn();
+    }
+
+    this.event = function () {
+        this.el.addEventListener('keyup', function (e) {
+            if (e.keyCode === 229 && ['ArrowDown','Escape'].indexOf(e.code) > -1) {
+                return;
+            }
+            if (e.target.value.length > 0) {
+                if ([40,38,27].indexOf(e.keyCode) < 0) {
+                    self.delay(function() {
+                        self.keywordSubmit(e.target.value);
+                    }, 200);
+                }
+            } else {
+                self.close();
+            }
+        });
+        this.el.addEventListener('keydown', function (e) {
+            if (e.keyCode === 27) {
+                e.preventDefault();
+                self.close();
+                return;
+            }
+            self.arrowKey(e);
+        });
+
+        document.querySelector('body').addEventListener('click', function () {
+            var search_auto_complete_list =  document.querySelectorAll('.search-auto-complete-list');
+            for (var i=0; i<search_auto_complete_list.length; i++) {
+                if (search_auto_complete_list[i].style.display === 'block') {
+                    self.currentClose(search_auto_complete_list[i], 'search-auto-complete-list');
+                    break;
+                }
+            }
+        });
+    }
+
+    this.currentClose = function (el, search) {
+        if (el.className && el.className.indexOf(search) > -1) {
+            this.close();
+        } else {
+            this.currentClose(el.parentElement, search);
+        }
+    }
+
+    this.delay = (function() {
+        var timer = 0;
+        return function(callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        }
+    })();
+
+    this.keywordSubmit = function (param) {
+        this.search_keyword = param;
+        jQuery.ajax({
+            type: "POST",
+            url: "/html/search_engine.action.html",
+            data: {
+                action: 'auto_completion',
+                keyword: this.englishReplace(this.replaceKeyword(param)),
+                original_keyword: this.replaceKeyword(param),
+            },
+            dataType: 'json',
+            async: true,
+            success: function(response) {
+                if (response.result) {
+                    self.indexReset();
+
+                    self.categories = [];
+                    for (var i=0; i<response.categories.length; i++) {
+                        if (i >= self.options.category_count) break;
+                        self.categories.push(response.categories[i]);
+                    }
+                    self.keywords = response.keywords;
+                    self.all_keywords = self.categories.concat(response.keywords);
+
+                    self.autoCompleteHtml({
+                        categories: self.categories,
+                        keywords: self.keywords,
+                    });
+                    self.eventClickKeywordInputValue();
+                }
+            }
+        });
+    }
+
+    this.eventClickKeywordInputValue = function () {
+        if (this.options.link_enabled === false) {
+            var keyword_el = document.querySelectorAll('.keyword-el');
+            for (var i=0; i<keyword_el.length; i++) {
+                keyword_el[i].addEventListener('click', function(e) {
+                    self.el.value = (e.target.tagName === 'STRONG') ? e.target.parentElement.innerText : e.target.innerText;
+                });
+            }
+        }
+    }
+
+    this.createListHtml = function (param) {
+        var result = [];
+        if (param.length > 0) {
+            result.push("<ul>");
+            result.push(this.createLi(param));
+            result.push("</ul>");
+        }
+        return result.join(' ');
+    }
+
+    this.createLi = function (param) {
+        var result = [];
+        var keyword = this.replaceKeyword(this.search_keyword);
+        var regex = new RegExp(keyword, "g");
+        for (var i=0; i<param.length; i++) {
+            var name = param[i].name.replace(regex, "<strong>"+ keyword +"</strong>");
+            var link = (param[i].link) ? param[i].link : "/shop/shopbrand.html?search="+param[i].name;
+            if (this.options.link_enabled) {
+                result.push("<li><a href='"+ link +"'><span>"+ name +"</span></a></li>");
+            } else {
+                result.push("<li><a href='javascript:;' class='keyword-el' data-keyword='"+ param[i].name +"'><span>"+ name +"</span></a></li>");
+            }
+        }
+        return result.join(' ');
+    }
+
+    this.autoCompleteHtml = function (param) {
+        var search_auto_complete_list = this.findParentElement(this.el, '.search-auto-complete-list');
+        var html = [];
+        if (search_auto_complete_list) {
+            if (param.categories.length > 0) {
+                html.push(this.createListHtml(param.categories));
+            }
+            if (param.keywords.length > 0) {
+                html.push(this.createListHtml(param.keywords));
+            }
+            if (html.length > 0) {
+                html.push('<a href="#none" class="search-list-close">´Ý±â X</a>');
+                search_auto_complete_list.innerHTML = html.join(' ');
+                search_auto_complete_list.style.display = "block";
+                this.closeEvent();
+            } else {
+                search_auto_complete_list.style.display = "none";
+            }
+        }
+    }
+
+    this.findParentElement = function (el, search) {
+        var result = el.querySelector(search);
+        if (result) {
+            return result;
+        } else {
+            return this.findParentElement(el.parentElement, search);
+        }
+    }
+
+    this.closeEvent = function () {
+        var search_list_close = document.querySelectorAll('.search-list-close');
+        for (var i=0; i<search_list_close.length; i++) {
+            search_list_close[i].addEventListener('click', function () {
+                self.close();
+            });
+        }
+    }
+
+    this.close = function () {
+        var search_auto_complete_list = this.findParentElement(this.el, '.search-auto-complete-list');
+        search_auto_complete_list.style.display = "none";
+    }
+
+    this.open = function () {
+        var search_auto_complete_list = this.findParentElement(this.el, '.search-auto-complete-list');
+        search_auto_complete_list.style.display = "block";
+    }
+
+    this.englishReplace = function (str) {
+        var en_h = "rRseEfaqQtTdwWczxvg";
+        var en_b = {k:0,o:1,i:2,O:3,j:4,p:5,u:6,P:7,h:8,hk:9,ho:10,hl:11,y:12,n:13,nj:14,np:15,nl:16,b:17,m:18,ml:19,l:20};
+        var en_f = {"":0,r:1,R:2,rt:3,s:4,sw:5,sg:6,e:7,f:8,fr:9,fa:10,fq:11,ft:12,fx:13,fv:14,fg:15,a:16,q:17,qt:18,t:19,T:20,d:21,w:22,c:23,z:24,x:25,v:26,g:27};
+        var reg_h = "[" + en_h + "]";
+        var reg_b = "hk|ho|hl|nj|np|nl|ml|k|o|i|O|j|p|u|P|h|y|n|b|m|l";
+        var reg_f = "rt|sw|sg|fr|fa|fq|ft|fx|fv|fg|qt|r|R|s|e|f|a|q|t|T|d|w|c|z|x|v|g|";
+        var reg_exp = new RegExp("("+reg_h+")("+reg_b+")(("+reg_f+")(?=("+reg_h+")("+reg_b+"))|("+reg_f+"))","g");
+        return str.replace(reg_exp, function(str,h,b,f) {
+            return String.fromCharCode(en_h.indexOf(h) * 588 + en_b[b] * 28 + en_f[f] + 44032);
+        });
+    }
+
+    this.replaceKeyword = function (param) {
+        return param.replace(/[`~!@#$%^&*()_+'"\/\|}{\[\]\,\_;:\-=\\]+/ig,"");
+    }
+}
+
+function searchAutoCompleteOption(el)
+{
+    var regexp = /enabled_category_count_[0-3]{1}/;
+    var result = {};
+    if (regexp.test(el.className)) {
+        var enabled_category_counts = el.className.match(regexp);
+        result = {
+            category_count: parseInt(enabled_category_counts[0].replace("enabled_category_count_","")),
+        }
+    }
+    return result;
+}

@@ -1,0 +1,43 @@
+/* BASIC css start */
+.tab-fixed-wrap .category { width: 70%; margin: 0 auto; }
+.tab-fixed-wrap .category:after { content:''; display:block; clear:both; }
+.tab-fixed-wrap .category li { position: relative; display: inline-block; color:#fff; height: 90px; line-height: 90px; padding: 0 1.3%; }
+.tab-fixed-wrap .category li a { display:inline-block; font-size:15px; font-weight:400; }
+.tab-fixed-wrap .category li a.on:after { position: absolute; top: 35px; right: 11%; width: 7px; height: 7px; background: #ff6d44; border-radius:50%; content: ""; }
+.tab-fixed-wrap .category li a.on3:after { position: absolute; top: 35px; right: 11%; width: 7px; height: 7px; background: #27a2d9; border-radius:50%; content: ""; }
+.tab-fixed-wrap .category li .cateBox { position:absolute; z-index:40; display:none; left:50%; width:140px; margin-left: -70px; padding: 10px; background:#fff; border:1px solid #eeeeee; text-align:center; }
+.tab-fixed-wrap .category li .cateBox a { display:block; font-size: 14px; line-height: 33px; }
+.tab-fixed-wrap .category li .cateBox a:hover { color: #ff6d44; text-decoration: underline; text-underline-position: under; }
+.tab-fixed-wrap .category li:hover .cateBox { display:block; }
+
+.tab-fixed-wrap .category li a.on2:after { position: absolute; top: 35px; right: 11%; width: 7px; height: 7px; background: #ff6d44; border-radius:50%; content: ""; 
+    -webkit-animation: blink 1.2s ease-in-out infinite alternate;
+    -moz-animation: blink 1.2s ease-in-out infinite alternate;
+    animation: blink 1.2s ease-in-out infinite alternate;
+}
+@-webkit-keyframes blink {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@-moz-keyframes blink {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes blink {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+/* BASIC css end */
+

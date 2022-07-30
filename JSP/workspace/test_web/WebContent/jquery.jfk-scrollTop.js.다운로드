@@ -1,0 +1,69 @@
+
+/**********************************************************************************
+
+    Project Name: JFK Scroll Top jquery plugin
+    Project Description: The JQuery plugin for scroll to top animation.
+    File Name: jquery.jfk-scrollTop.js
+    Author: fullstackdev
+    Author URI: 
+    Version: 1.1
+    
+**********************************************************************************/
+
+
+
+;(function($) { //self invoking 
+    
+    'use strict'; //strict mode for js5/6
+
+    //variables for scroll position
+    var scrollPosition
+
+    //Get and assign the scroll position value
+    $(window).scroll(function (event) {
+        scrollPosition = $(window).scrollTop();
+    });
+
+    // Set condition to show scroll button    
+	$(window).on("scroll", function () {      /*When Make Scroll*/
+        
+        if ($(this).scrollTop() > 700) {     /*To Show Div After 100px From Scroll Top*/
+            $('.jfk-scrollTop').slideDown();
+        } else {                             /*To Hide Div */
+            $('.jfk-scrollTop').slideUp();
+        }
+        
+	});
+
+
+
+
+  
+   
+    
+//Choose function name from following.
+
+   /*=============================================
+   =            Function for effects             =
+   =============================================*/
+              
+function powerup_bounce(){
+        $('html, body').animate({scrollTop : scrollPosition+75}, 100);
+        
+        $('html, body').animate({scrollTop : 0}, 300);
+        $('html, body').animate({scrollTop : 50}, 150);
+        $('html, body').animate({scrollTop : 0}, 150);
+        $('html, body').animate({scrollTop : 10}, 150);
+        $('html, body').animate({scrollTop : 0}, 150);
+   
+    }
+    //powerup_bounce END 
+    
+ 
+
+/*----------  End of functions  ----------*/
+
+
+}(jQuery));
+
+                        /*=====  End of plugin  ======*/

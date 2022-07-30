@@ -1,0 +1,18 @@
+1655273892162	Move 'user' to 'app'
+1655276777864	Rename type 'CharacterEncodingFilter'
+1655277910957	Rename resource 'member.xml'
+1655281440171	Rename type 'UserDAO'
+1655281444288	Rename type 'UserJoinAction'
+1655281451767	Rename type 'UserFrontController'
+1655281798205	Delete element
+1655281879140	Delete element
+1655281882178	Rename type 'UserFrontController1'
+1655281884720	Rename type 'UserJoinAction1'
+1655281887472	Rename type 'UserDAO1'
+1655357537276	Copy files
+1655359452035	Copy compilation units
+1655360522082	Copy package
+1655360527093	Copy package
+1655360538250	Copy package
+1655364039901	Copy package
+1655364329724	Copy package

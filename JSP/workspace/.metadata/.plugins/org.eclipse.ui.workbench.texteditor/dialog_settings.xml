@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item value="729" key="DIALOG_X_ORIGIN"/>
+		<item value="399" key="DIALOG_Y_ORIGIN"/>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="false" key="isRegEx"/>
+		<item value="/board/Boardlist.bo" key="selection"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="incremental"/>
+		<item value="true" key="wrap"/>
+		<item value="false" key="wholeword"/>
+		<list key="findhistory">
+			<item value="/board/Boardlist.bo"/>
+			<item value="selectGoods"/>
+			<item value="selectGoods1"/>
+			<item value="객체"/>
+			<item value="GID"/>
+			<item value="GOODS"/>
+			<item value="SHOPPING"/>
+			<item value="shopping"/>
+			<item value="file1"/>
+			<item value="ADDgoodsOk"/>
+			<item value="AD-Page/ADDgoodsOk"/>
+			<item value="/shoppingmall/mypage.spm"/>
+			<item value="shop"/>
+			<item value="lobby"/>
+			<item value="삭재\"/>
+		</list>
+		<list key="replacehistory">
+			<item value="boardcontent"/>
+			<item value=""/>
+			<item value="username"/>
+			<item value="&#x09;&#x09;&#x09;&#x09;&#x09;&#x09;&lt;th class=&quot;table-edit-part&quot;&gt;&lt;input class=&quot;update-cell&quot; type=&quot;text&quot;&gt;&lt;/th&gt;"/>
+			<item value="010-0000-0000"/>
+			<item value="0"/>
+			<item value="href"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="288" key="DIALOG_WIDTH"/>
+		<item value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕" key="DIALOG_FONT_NAME"/>
+		<item value="391" key="DIALOG_HEIGHT"/>
+		<item value="1640" key="DIALOG_X_ORIGIN"/>
+		<item value="401" key="DIALOG_Y_ORIGIN"/>
+	</section>
+</section>

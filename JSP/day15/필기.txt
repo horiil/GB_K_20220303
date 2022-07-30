@@ -1,0 +1,39 @@
+국비
+
+Zoom 회의 참가
+https://us06web.zoom.us/j/6633076301?pwd=dWNHUy9icnFhMjFqVFFjNEl0TUVjUT09
+
+회의 ID: 663 307 6301
+암호: 0900k
+--------------------------------------------------------------
+목
+박종휘   유원철    김태경   조현하   김민수  정유섭
+--------------------------------------------------------------
+1. 경로
+ - ${pageContext.request.contextPath} : 내 현재 위치(프로젝트 위치)
+ <img src="${pageContext.request.contextPath}/resource/img/cat.png" />
+
+ - http://localhost:9090/project01/abc.jsp
+ - ${pageContext.request.requestURL} : http://localhost:9090/project01/abc.jsp
+ - ${pageContext.request.scheme} : http
+ - ${pageContext.request.serverName} : localhost
+ - ${pageContext.request.serverPort} : 9090
+ - ${pageContext.request.requestURI} : /project01/abc.jsp
+ - ${pageContext.request.servletPath} : /abc.jsp
+
+
+4시 40분까지
+
+
+
+
+
+
+
+
+
+
+
+
+
+

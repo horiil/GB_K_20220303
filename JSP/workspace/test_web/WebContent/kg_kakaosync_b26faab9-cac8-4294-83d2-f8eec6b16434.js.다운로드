@@ -1,0 +1,193 @@
+﻿parcelRequire = (function (e, r, t, n) {
+  var i,
+    o = "function" == typeof parcelRequire && parcelRequire,
+    u = "function" == typeof require && require;
+  function f(t, n) {
+    if (!r[t]) {
+      if (!e[t]) {
+        var i = "function" == typeof parcelRequire && parcelRequire;
+        if (!n && i) return i(t, !0);
+        if (o) return o(t, !0);
+        if (u && "string" == typeof t) return u(t);
+        var c = new Error("Cannot find module '" + t + "'");
+        throw ((c.code = "MODULE_NOT_FOUND"), c);
+      }
+      (p.resolve = function (r) {
+        return e[t][1][r] || r;
+      }),
+        (p.cache = {});
+      var l = (r[t] = new f.Module(t));
+      e[t][0].call(l.exports, p, l, l.exports, this);
+    }
+    return r[t].exports;
+    function p(e) {
+      return f(p.resolve(e));
+    }
+  }
+  (f.isParcelRequire = !0),
+    (f.Module = function (e) {
+      (this.id = e), (this.bundle = f), (this.exports = {});
+    }),
+    (f.modules = e),
+    (f.cache = r),
+    (f.parent = o),
+    (f.register = function (r, t) {
+      e[r] = [
+        function (e, r) {
+          r.exports = t;
+        },
+        {}
+      ];
+    });
+  for (var c = 0; c < t.length; c++)
+    try {
+      f(t[c]);
+    } catch (e) {
+      i || (i = e);
+    }
+  if (t.length) {
+    var l = f(t[t.length - 1]);
+    "object" == typeof exports && "undefined" != typeof module
+      ? (module.exports = l)
+      : "function" == typeof define && define.amd
+      ? define(function () {
+          return l;
+        })
+      : n && (this[n] = l);
+  }
+  if (((parcelRequire = f), i)) throw i;
+  return f;
+})(
+  {
+    pQ09: [
+      function (require, module, exports) {
+        try {
+          var e = document.getElementById("kgSync-init"),
+            t = e && e.getAttribute("data-member") ? e : document.getElementById("kg-service-data"),
+            n = "이름없음",
+            o = document.cookie.indexOf("from_mobile=YES") > -1,
+            a = o ? "pc" : e && e.getAttribute("data-env"),
+            c = t && t.getAttribute("data-member") ? t.getAttribute("data-member") : "",
+            r = "/m/order.html" === document.location.pathname || "/shop/order.html" === document.location.pathname,
+            i = function () {
+              var e = document.querySelector("#kg-background-cover");
+              e && document.body.removeChild(e);
+            },
+            d = {
+              checkPage: function (e) {
+                switch (e) {
+                  case "/":
+                  case "/index.html":
+                  case "/shop/member.html":
+                  case "/shop/qmember.html":
+                  case "/shop/confirm_login.html":
+                  case "/shop/idinfo.html":
+                  case "/m/index.html":
+                  case "/m/main.html":
+                  case "/m/login.html":
+                  case "/m/join_contract.html":
+                  case "/m/join_us.html":
+                  case "/m/order_complete.html":
+                  case "/m/product.html":
+                    return !0;
+                  default:
+                    return !1;
+                }
+              },
+              injectFiles: function (e) {
+                e && window.addEventListener("load", d.loadFiles(), !1);
+              },
+              loadFiles: function () {
+                if (!window.kg_syncInitialized) {
+                  window.kg_syncInitialized = !0;
+                  var e = document.createElement("script");
+                  (e.id = "kg-kakaoSync-service"),
+                    (e.type = "text/javascript"),
+                    (e.async = !0),
+                    (e.characterSet = "UTF-8"),
+                    (e.src = "//storage.keepgrow.com/admin/kakaosync/makeshop/"
+                      .concat(a, "/kg_kakaoSync_")
+                      .concat(a, ".js")),
+                    -1 !== window.navigator.userAgent.indexOf("MSIE ")
+                      ? document.body.appendChild(e)
+                      : document.body.insertBefore(e, null);
+                  var t = document.createElement("link");
+                  (t.rel = "stylesheet"),
+                    (t.type = "text/css"),
+                    (t.href = "//storage.keepgrow.com/admin/kakaosync/makeshop/"
+                      .concat(a, "/kg_kakaoSync_")
+                      .concat(a, ".css")),
+                    document.body.insertBefore(t, null),
+                    d.catchLoadFilesError();
+                }
+              },
+              catchLoadFilesError: function () {
+                document.querySelector("#kg-kakaoSync-service").onerror = function () {
+                  throw new Error("keepgrow-debug : kg-kakaoSync-service load fail!");
+                };
+              },
+              catchNoName: function () {
+                if (r) {
+                  var e = document.querySelectorAll("input[value='B']");
+                  [].forEach.call(e, function (e) {
+                    "hidden" !== e.type &&
+                      e.addEventListener("click", function (e) {
+                        e.stopPropagation();
+                        var t = document.querySelector('input[name="bankname"]'),
+                          o = document.querySelector('input[name="sender"]').value === n,
+                          a = t && ("" === t.value || t.value === n);
+                        "INPUT" === e.target.tagName &&
+                          "radio_paymethod" === e.target.name &&
+                          "B" === e.target.value &&
+                          o &&
+                          a &&
+                          alert(
+                            "이름이 [".concat(
+                              n,
+                              "]으로 되어있습니다. [무통장 입금자명]에 성함을 정확하게 입력해주세요."
+                            )
+                          );
+                      });
+                  }),
+                    document.querySelector('input[name="same"]').addEventListener("click", function () {
+                      document.querySelector('input[name="receiver"]').value === n &&
+                        alert("수취자명이 [".concat(n, "]으로 되어있습니다. 성함을 정확하게 입력해주세요."));
+                    });
+                }
+              }
+            };
+          (window.keepgrowService = function (e, t) {
+            window.keepgrowService.key = t;
+          }),
+keepgrowService(
+              { hosting: "makeshop", service: ["kakaoSync"] },
+              { skintype : "d4", qrcode : "", uiHide : "true", appInfo : "", shopName : "XEXYMIX", snsType : "A", boosterGuest : "false", accessKey : "", boosterMember : "", domain : "xexymix.com", logo : "https://uneedcomms-keepgrow.s3.ap-northeast-2.amazonaws.com/5358145a346c43fd8bfc82106ece86ca/processes/1608111583528.png", theme : "A", bannerImg : "https://uneedcomms-keepgrow.s3.ap-northeast-2.amazonaws.com/5358145a346c43fd8bfc82106ece86ca/processes/1612515379590.jpg", mainAccountSync : "false", businessAuthority : "true" }
+            );
+            (function () {
+              if (
+                !(
+                  window.keepgrowService.key.appInfo &&
+                  navigator.userAgent.indexOf(
+                    "".concat("powerApp" === window.keepgrowService.key.appInfo ? "PowerApp_" : "SmartApp")
+                  ) > -1
+                )
+              )
+                return c && r
+                  ? (i(),
+                    void window.addEventListener("load", function () {
+                      return d.catchNoName();
+                    }))
+                  : void d.injectFiles(d.checkPage(window.location.pathname));
+              i();
+            })();
+        } catch (m) {
+          console.log("keepgrow-kakaoSync-debug: " + m);
+        }
+      },
+      {}
+    ]
+  },
+  {},
+  ["pQ09"],
+  null
+);
