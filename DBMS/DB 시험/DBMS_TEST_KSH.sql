@@ -1,0 +1,150 @@
+--문제 1. hr 계정의 EMPLOYEES 테이블과  동일한 컬럼과 데이터를 갖는 (테이블 복사)EMPLOYEES_NEW 테이블을 생성하는 SQL문을 작성하시오.
+CREATE TABLE EMPLOYEES_NEW AS 
+SELECT * FROM EMPLOYEES;
+
+SELECT * FROM EMPLOYEES_NEW;
+
+
+--문제 2. hr 계정의 DEPARTMENTS 테이블과  동일한 컬럼과 데이터를 갖는(테이블 복사) DEPARTMENTS_NEW 테이블을 생성하는 SQL문을 작성하시오.
+CREATE TABLE DEPARTMENTS_NEW AS
+SELECT * FROM DEPARTMENTS;
+
+SELECT * FROM DEPARTMENTS_NEW;
+
+ 
+--문제 3. EMPLOYEES_NEW 테이블에 가변길이 문자형 데이터타입인 USER_NAME 컬럼(문자 길이는 자유)을 추가하시오.
+ALTER TABLE EMPLOYEES_NEW ADD (USER_NAME VARCHAR2(10));
+
+
+--문제 4. EMPLOYEES_NEW 테이블 EMPLOYEE_ID 컬럼에 Primary Key 제약조건(제약조건이름 자유)을 추가한다.
+ALTER TABLE EMPLOYEES_NEW ADD CONSTRAINT PK PRIMARY KEY (EMPLOYEE_ID);
+
+
+--문제 5. DEPARTMENTS_NEW 테이블 DEPARTMENT_ID 컬럼에 Primary Key 제약조건(제약조건이름 자유)을 추가한다.
+ALTER TABLE DEPARTMENTS_NEW ADD CONSTRAINT PK2 PRIMARY KEY (DEPARTMENT_ID); 
+
+
+--문제 6. EMPLOYEES_NEW 테이블의 DEPARTMENT_ID 컬럼과 DEPARTMENTS_NEW 테이블 DEPARTMENT_ID 컬럼을 EMPLOYEES_NEW 테이블이 자식 테이블, 
+--       DEPARTMENTS_NEW 테이블 이 부모 테이블로 Foreign Key 제약 조건(제약조건이름 자유)을 추가한다.
+ALTER TABLE EMPLOYEES_NEW 
+ADD CONSTRAINT FK FOREIGN KEY (DEPARTMENT_ID)
+REFERENCES DEPARTMENTS_NEW (DEPARTMENT_ID);
+
+
+-- 문제 7. EMPLOYEES_NEW 테이블과 DEPARTMENTS_NEW 테이블을 사용하여 DEPARTMENT_ID = 60인 사원의 
+--		  EMPLOYEE_ID , FIRST_NAME , DEPARTMENT_ID, DEPARTMENT_NAME을 오름차순으로 조회 하시오.
+SELECT en.EMPLOYEE_ID , en.FIRST_NAME , en.DEPARTMENT_ID , dn.DEPARTMENT_NAME 
+FROM EMPLOYEES_NEW en 
+LEFT OUTER JOIN DEPARTMENTS_NEW dn ON en.DEPARTMENT_ID = dn.DEPARTMENT_ID
+WHERE en.DEPARTMENT_ID = 60
+ORDER BY dn.DEPARTMENT_NAME ASC;
+
+-- 문제 8. EMPLOYEES_NEW 테이블에서 DEPARTMENT_ID가 100인 사원들의 급여(SALARY) 평균을 구하여라.
+SELECT AVG(SALARY)  
+FROM EMPLOYEES_NEW en 
+WHERE DEPARTMENT_ID = 100;
+
+
+-- 문제 9. EMPLOYEES_NEW 테이블을 삭제 하시요.
+DROP TABLE EMPLOYEES_NEW;
+
+
+-- 문제 10. DEPARTMENTS_NEW 테이블을 삭제 하시요.
+DROP TABLE DEPARTMENTS_NEW;
+
+
+-- 문제 11. EMPLOYEES 테이블과 DEPARTMENTS 테이블을 사용하여 
+-- ‘Sales’ 부서이름에 속한 직원의 이름(FIRST_NAME), 급여(SALARY), 부서이름(DEPARTMENT_NAME)을 조회하시오.
+-- 단, 급여는 100번 부서의 평균보다 적게 받는 직원 정보만 출력되어야 한다.(총 16건)
+SELECT e.FIRST_NAME , e.SALARY , d.DEPARTMENT_NAME
+FROM EMPLOYEES e 
+LEFT OUTER JOIN DEPARTMENTS d ON e.DEPARTMENT_ID = d.DEPARTMENT_ID
+WHERE d.DEPARTMENT_NAME = 'Sales'
+AND e.SALARY < (SELECT AVG(e2.SALARY)  FROM EMPLOYEES e2 WHERE e2.DEPARTMENT_ID = 100);
+
+
+-- 문제 12.EMPLOYEES 테이블과 DEPARTMENTS테이블을 사용하여, 커미션(COMMISSION_PCT)을 받는 
+-- 사원의 이름(FIRST_NAME), 직업(JOB_ID), 부서번호(DEPARTMENT_ID),부서명(DEPARTMENT_NAME)을 출력하라.(총 35건)
+SELECT e.FIRST_NAME , e.JOB_ID , e.DEPARTMENT_ID , d.DEPARTMENT_NAME 
+FROM EMPLOYEES e 
+LEFT OUTER JOIN DEPARTMENTS d ON e.DEPARTMENT_ID = d.DEPARTMENT_ID 
+WHERE e.COMMISSION_PCT IS NOT NULL;
+
+
+-- 문제 13. EMPLOYEES 테이블에서 사원번호가(EMPLOYEE_ID) 123인 사원의 
+-- 직업(JOB_ID)과 같고 , 사원번호(EMPLOYEE_ID)가 192인 사원의 급여(SALARY)보다 많은 사원의 
+-- 사원번호(EMPLOYEE_ID),이름(FIRST_NAME),직업(JOB_ID),급여(SALARY)를 출력하라.(총 5건)
+SELECT e.EMPLOYEE_ID , e.FIRST_NAME , e.JOB_ID , e.SALARY 
+FROM EMPLOYEES e 
+WHERE JOB_ID = (SELECT JOB_ID FROM EMPLOYEES e2 WHERE EMPLOYEE_ID = 123)
+AND SALARY > (SELECT SALARY  FROM EMPLOYEES e3 WHERE EMPLOYEE_ID = 192);
+
+
+-- 문제 14. 학생 관리를 위한 다음 조건을 만족시키는 STUDENT 테이블을 생성하여라.
+/*(조건(컬럼명 자유) :
+
+아이디(숫자-정수3자리,Primary Key), 
+
+이름(문자-가변 문자 10자리,Not Null), 
+
+전화번호(숫자-정수11자리,Not Null), 
+
+주소(문자-가변 문자 100자리), 
+
+과목수(숫자-정수1자리)
+
+)*/
+CREATE TABLE STUDENT(
+	아이디	NUMBER(3)		UNIQUE NOT NULL,
+	이름		VARCHAR2(10) 	NOT NULL,
+	전화번호	NUMBER(11)		NOT NULL,
+	주소		VARCHAR2(100),
+	과목수	NUMBER(1)
+);
+
+SELECT *
+FROM STUDENT ;
+
+
+--문제 15. STUDENT 테이블의 이름 컬럼에 UNIQUE INDEX를 설정 하세요.
+CREATE UNIQUE INDEX UNI ON STUDENT(이름);
+
+
+-- 문제 16. STUDENT 테이블에 임의의 데이터 10건을 입력하여라.
+
+INSERT INTO STUDENT (아이디, 이름, 전화번호, 주소, 과목수)
+	VALUES ('1',	'밤비',		'01012345678', '주소1', 	'4');
+INSERT INTO STUDENT (아이디, 이름, 전화번호, 주소, 과목수)
+	VALUES ('2', 	'미피',		'11012345678', '주소2', 	'3');
+INSERT INTO STUDENT (아이디, 이름, 전화번호, 주소, 과목수)
+	VALUES ('3', 	'톰',		'21012345678', '주소3', 	'2');
+INSERT INTO STUDENT (아이디, 이름, 전화번호, 주소, 과목수)
+	VALUES ('4', 	'제리',		'31012345678', '주소4',	'9');
+INSERT INTO STUDENT (아이디, 이름, 전화번호, 주소, 과목수)
+	VALUES ('5', 	'푸우',		'41012345678', '주소5',	'3');
+INSERT INTO STUDENT (아이디, 이름, 전화번호, 주소, 과목수)
+	VALUES ('6', 	'뚱이', 		'51012345678', '주소6',	'1');
+INSERT INTO STUDENT (아이디, 이름, 전화번호, 주소, 과목수)
+	VALUES ('7', 	'징징이', 	'61012345678', '주소7',	'3');
+INSERT INTO STUDENT (아이디, 이름, 전화번호, 주소, 과목수)
+	VALUES ('8', 	'핑핑이', 	'71012345678', '주소8',	'2');
+INSERT INTO STUDENT (아이디, 이름, 전화번호, 주소, 과목수)
+	VALUES ('9', 	'피카츄', 	'81012345678', '주소9', 	'7');
+INSERT INTO STUDENT (아이디, 이름, 전화번호, 주소, 과목수)
+	VALUES ('10',	'엘사', 		'91012345678', '주소10', 	'3');
+
+SELECT *
+FROM STUDENT s ;
+
+
+-- 문제 17. STUDENT 테이블의 이름 컬럼에 UNIQUE INDEX를 삭제 하세요.
+DROP INDEX UNI;
+
+
+
+
+
+
+
+
+
